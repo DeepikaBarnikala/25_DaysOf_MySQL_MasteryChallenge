@@ -147,7 +147,7 @@ Scalar Functions
 
 - GROUP BY
 - HAVING
-
+- ORDER BY
 ---
 
 🔗 Joins
