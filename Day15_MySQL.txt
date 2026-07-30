@@ -781,6 +781,58 @@ mysql> SELECT E.EMP_ID,E.NAME,D.DEPARTMENT_ID,D.DEPARTMENT_NAME
 +--------+---------+---------------+-----------------+
 10 rows in set (0.01 sec)
 
+VIEWS:
+=========================================
+
+Q. WHAT IS A VIEW?
+=======================
+A view a virtual table in MySQL. Built from the results of stored select statement . it looks and behaves like regular table when you query it.
+you can select from it, filter it and join it.but it doesn't store any data on its own. every time view is queried, my sql runs its underlying select statement against in real tables and returns the result.
+
+why do we need views
+=====================
+simplify complex queries.
+reuse query logic
+data security.
+logical data independence.
+
+Advantages
+===========
+security
+reusability
+simplicity
+consistency
+maintainability
+custom data presentation
+no extra storage cost
+
+CREATING VIEW:
+=================
+SYNTAX:
+-------
+CREATE VIEW VIEW_NAME AS 
+SELECT COLUMNS FROM TABLE
+WHERE CONITION;
+
+
+ALTERING VIEWS:
+===============
+SYNTAX:
+-------
+ALTER VIEW VIEW_NAME AS
+SELECT NEW COLUMNS
+FROM NEW TABLES;
+
+
+DROPPING VIEW:
+==============
+SYNTAX:
+------
+DROP VIEW VIEW_NAME;
+
+DROP VIEW IF EXISTS VIEW_NAME;
+
+
 mysql> SHOW DATABASES;
 +--------------------+
 | Database           |
