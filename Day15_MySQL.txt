@@ -1,3 +1,102 @@
+Day_15_MySQL
+=============
+
+JOINS
+======
+A join in MySQL is used to combine rows from two or more tables based on related columns.
+
+example:
+========
+employee-table ---> employee details
+department-table --> department details
+if you want to see which employee belongings to which department you need to join these two tables.
+
+why do we need joins?
+=====================
+1. to fetch data from multiple tables in a single query.
+2. to reduce data duplication(instead of keeping everything one table.)
+3. to implement relationships like (one-to-one, one-to-many, many-to-many, many-to-one) in databases
+4. to generate reports and analytics combing different datasets.
+
+Types of Joins:
+================
+Inner Join
+Left Join
+Right Join
+Full Join
+Cross Join
+Self Join
+
+Inner Join
+============
+returns only the rows that have matching values in both tables.
+
+syntax:
+========
+select columns 
+from table1
+inner join table2
+on table1.common_column = table2.common_column;
+
+Left Join
+==========
+returns all the rows from the left table and the matches rows from the right table. if no match , NULL values appear for right table columns.
+
+syntax:
+========
+select columns 
+from table1
+left join table2
+on table1.common_column = table2.common_column;
+
+Right Join
+==========
+returns all the rows from the Right table and the matches rows from the Left table. if no match , NULL values appear for Left table columns.
+
+syntax:
+========
+select columns 
+from table1
+right join table2
+on table1.common_column = table2.common_column;
+
+Full Join
+==========
+To simulate use the union of left and right join
+
+syntax:
+========
+select columns 
+from table1
+left join table2
+on table1.common_column = table2.common_column
+union
+select columns 
+from table1
+right join table2
+on table1.common_column = table2.common_column;
+
+Cross Join
+===========
+returns cartesian products --> every row from the first table with every row from the second table.
+
+syntax:
+========
+select columns
+from table1
+cross join table2;
+
+Self Join:
+===========
+a table joined with itself
+
+syntax:
+========
+select a.column,b.column
+from table1 a
+inner join table1 b
+on a.common_column=b.common_column;
+
 mysql> SHOW DATABASES;
 +--------------------+
 | Database           |
