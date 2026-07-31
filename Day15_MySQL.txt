@@ -272,11 +272,6 @@ mysql> SELECT*FROM PROJECTS;
 
 mysql> SELECT E.EMP_ID,E.NAME,D.DEPARTMENT_NAME
     -> FROM EMPLOYEES E
-    -> INNER JOIN DEPARTMENT D
-    -> ON E.DEPARTMENT_ID=D.DEPARTMENT_ID;
-ERROR 1146 (42S02): Table 'psf4.department' doesn't exist
-mysql> SELECT E.EMP_ID,E.NAME,D.DEPARTMENT_NAME
-    -> FROM EMPLOYEES E
     -> INNER JOIN DEPARTMENTS D
     -> ON E.DEPARTMENT_ID=D.DEPARTMENT_ID;
 +--------+---------+-----------------+
@@ -473,26 +468,6 @@ mysql> SELECT D.DEPARTMENT_ID,D.DEPARTMENT_NAME,E.NAME
     -> WHERE D.DEPARTMENT_NAME IS NULL;
 Empty set (0.02 sec)
 
-mysql> SELECT E.EMP_ID,E.EMP_NAME,D.DEPARTMENT_NAME 
-    -> FROM EMPLOYEES E
-    -> LEFT JOIN
-    -> ON E.DEPARTMENT_ID=D.DEPARTMENT_ID
-    -> WHERE D.DEPARTMENT_NAME IS NULL;
-ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'ON E.DEPARTMENT_ID=D.DEPARTMENT_ID
-WHERE D.DEPARTMENT_NAME IS NULL' at line 4
-mysql> SELECT E.EMP_ID,E.NAME,D.DEPARTMENT_NAME 
-    -> FROM EMPLOYEES E
-    -> LEFT JOIN
-    -> ON E.DEPARTMENT_ID=D.DEPARTMENT_ID
-    -> WHERE D.DEPARTMENT_NAME IS NULL;
-ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'ON E.DEPARTMENT_ID=D.DEPARTMENT_ID
-WHERE D.DEPARTMENT_NAME IS NULL' at line 4
-mysql> SELECT E.EMP_ID,E.EMP_NAME,D.DEPARTMENT_NAME 
-    -> FROM EMPLOYEES E
-    -> LEFT JOIN DEPARTMENTS D
-    -> ON E.DEPARTMENT_ID=D.DEPARTMENT_ID
-    -> WHERE D.DEPARTMENT_NAME IS NULL;
-ERROR 1054 (42S22): Unknown column 'E.EMP_NAME' in 'field list'
 mysql> SELECT E.EMP_ID,E.NAME,D.DEPARTMENT_NAME 
     -> FROM EMPLOYEES E
     -> LEFT JOIN DEPARTMENTS D
@@ -533,11 +508,6 @@ mysql> SELECT D.DEPARTMENT_NAME,E.NAME
 
 mysql> SELECT P.PROJECT_ID,P.PROJECT_NAME,E.NAME
     -> FROM PROJECTS P
-    -> RIGHT JOIN PROJECTS P
-    -> ON P.EMP_ID=E.EMP_ID;
-ERROR 1066 (42000): Not unique table/alias: 'P'
-mysql> SELECT P.PROJECT_ID,P.PROJECT_NAME,E.NAME
-    -> FROM PROJECTS P
     -> RIGHT JOIN EMPLOYEES E
     -> ON P.EMP_ID=E.EMP_ID;
 +------------+----------------------+---------+
@@ -557,21 +527,6 @@ mysql> SELECT P.PROJECT_ID,P.PROJECT_NAME,E.NAME
 +------------+----------------------+---------+
 11 rows in set (0.00 sec)
 
-mysql> select e.emp_id,e,name,d.department_name
-    -> from employees e
-    -> right join departments d
-    -> on e.department_id=d.department_id;
-ERROR 1054 (42S22): Unknown column 'e' in 'field list'
-mysql> select e.emp_id,e,name,d.department_name
-    -> from employees e
-    -> right join employees e
-    -> on e.department_id=d.department_id;
-ERROR 1066 (42000): Not unique table/alias: 'e'
-mysql> select e.emp_id,e,name,d.department_name
-    -> from departments d
-    -> right join employees e
-    -> on d.department_id=e.department_id;
-ERROR 1054 (42S22): Unknown column 'e' in 'field list'
 mysql> SELECT E.NAME,D.DEPARTMENT_NAME
     -> FROM EMPLOYEES E
     -> LEFT JOIN DEPARTMENTS D
@@ -655,23 +610,6 @@ mysql> SELECT*FROM EMPLOYEES
 +--------+---------+---------------+----------+---------------+-----------------+
 50 rows in set (0.00 sec)
 
-mysql> SELECT E.NAME,D.DEPARTMENT_NAME
-    ->     -> FROM EMPLOYEES E
-    ->     -> LEFT JOIN DEPARTMENTS D
-    ->     -> ON E.DEPARTMENT_ID = D.DEPARTMENT_ID
-    ->     -> UNION
-    ->     -> SELECT E.NAME,D.DEPARTMENT_NAME
-    ->     -> FROM EMPLOYEES E
-    ->     -> RIGHT JOIN DEPARTMENTS D
-    ->     -> ON E.DEPARTMENT_ID = D.DEPARTMENT_ID;
-ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'FROM EMPLOYEES E
-    -> LEFT JOIN DEPARTMENTS D
-    -> ON E.DEPARTMENT_ID = D.DE' at line 2
-mysql> SELECT E.NAME,D.DEPARTMENT_NAME
-    -> FROM EMPLOYEES E
-    -> LEFT JOIN DEPRATMENTS D
-    -> ON E.DEPARTMENT_ID=D.DEPARTMENT_ID
-    -> ^C
 mysql> SELECT E.NAME,D.DEPARTMENT_NAME
     -> FROM EMPLOYEES E
     -> LEFT JOIN DEPARTMENTS D
