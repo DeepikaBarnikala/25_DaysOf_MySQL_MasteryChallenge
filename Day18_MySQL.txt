@@ -1,0 +1,622 @@
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| college            |
+| company            |
+| db4                |
+| details            |
+| information_schema |
+| mysql              |
+| performance_schema |
+| practice           |
+| psf4               |
+| school1            |
+| student            |
+| students           |
+| sys                |
+| walmartsales       |
+| xyz                |
++--------------------+
+15 rows in set (0.39 sec)
+
+mysql> use psf4;
+Database changed
+mysql> show tables;
++----------------+
+| Tables_in_psf4 |
++----------------+
+| departments    |
+| employees      |
+| projects       |
++----------------+
+3 rows in set (0.05 sec)
+
+mysql> select * from employees;
++--------+----------+------------+----------+------------+-----------+
+| emp_id | emp_name | department | salary   | experience | city      |
++--------+----------+------------+----------+------------+-----------+
+|    101 | Rahul    | IT         | 65000.00 |          5 | Hyderabad |
+|    102 | Priya    | HR         | 45000.00 |          3 | Chennai   |
+|    103 | Amit     | Finance    | 70000.00 |          6 | Bangalore |
+|    104 | Sneha    | IT         | 80000.00 |          8 | Hyderabad |
+|    105 | Kiran    | Sales      | 40000.00 |          2 | Pune      |
+|    106 | Ravi     | HR         | 50000.00 |          4 | Mumbai    |
+|    107 | Anjali   | IT         | 90000.00 |         10 | Delhi     |
+|    108 | Suresh   | Finance    | 55000.00 |          5 | Chennai   |
+|    109 | Divya    | Sales      | 48000.00 |          3 | Hyderabad |
+|    110 | Vikram   | IT         | 75000.00 |          7 | Bangalore |
++--------+----------+------------+----------+------------+-----------+
+10 rows in set (0.02 sec)
+
+mysql> DELIMITER \\
+ERROR: 
+DELIMITER cannot contain a backslash character
+mysql> DELIMITER //
+mysql> CREATE PROCEDURE DEPTWISECOUNT()
+    -> BEGIN
+    ->     SELECT DEPARTMENT,COUNT(*) AS TOTAL_EMP
+    ->     FROM EMPLOYEES
+    ->     GROUP BY DEPARTMENT;
+    -> END //
+Query OK, 0 rows affected (0.10 sec)
+
+mysql> DELIMITER ;
+mysql> CALL DEPTWISECOUNT();
++------------+-----------+
+| DEPARTMENT | TOTAL_EMP |
++------------+-----------+
+| IT         |         4 |
+| HR         |         2 |
+| Finance    |         2 |
+| Sales      |         2 |
++------------+-----------+
+4 rows in set (0.03 sec)
+
+Query OK, 0 rows affected (0.03 sec)
+
+mysql> SHOW PROCEDURE STATUS
+    -> WHERE DB='PSF4';
++------+----------------------+-----------+----------------+---------------------+---------------------+---------------+---------+----------------------+----------------------+--------------------+
+| Db   | Name                 | Type      | Definer        | Modified            | Created             | Security_type | Comment | character_set_client | collation_connection | Database Collation |
++------+----------------------+-----------+----------------+---------------------+---------------------+---------------+---------+----------------------+----------------------+--------------------+
+| psf4 | DEPTWISECOUNT        | PROCEDURE | root@localhost | 2026-08-05 09:05:41 | 2026-08-05 09:05:41 | DEFINER       |         | utf8mb4              | utf8mb4_0900_ai_ci   | utf8mb4_0900_ai_ci |
+| psf4 | GETALLEMPLOYEES      | PROCEDURE | root@localhost | 2026-08-04 10:55:15 | 2026-08-04 10:55:15 | DEFINER       |         | utf8mb4              | utf8mb4_0900_ai_ci   | utf8mb4_0900_ai_ci |
+| psf4 | GETALLEMPLOYEESNAMES | PROCEDURE | root@localhost | 2026-08-04 11:05:47 | 2026-08-04 11:05:47 | DEFINER       |         | utf8mb4              | utf8mb4_0900_ai_ci   | utf8mb4_0900_ai_ci |
+| psf4 | GETITEMPLOYEES       | PROCEDURE | root@localhost | 2026-08-04 11:00:08 | 2026-08-04 11:00:08 | DEFINER       |         | utf8mb4              | utf8mb4_0900_ai_ci   | utf8mb4_0900_ai_ci |
++------+----------------------+-----------+----------------+---------------------+---------------------+---------------+---------+----------------------+----------------------+--------------------+
+4 rows in set (0.02 sec)
+
+mysql> -- IN PARAMETERS
+mysql> -- EMPLOYEE BY ID
+mysql> DELIMITER //
+mysql> CREATE PROCEDURE GETEMPBYID()
+    -> BEGIN
+    -> ^C
+mysql> -- IN PARAMETERS
+mysql> -- EMPLOYEE BY ID
+mysql> DELIMITER //
+mysql> CREATE PROCEDURE GETEMPBYID(IN eid INT)
+    -> BEGIN
+    -> SELECT * FROM EMPLOYEES 
+    -> WHERE EMP_ID=EID;
+    -> END //
+Query OK, 0 rows affected (0.04 sec)
+
+mysql> DELIMITER ;
+mysql> CALL GETEMPBYID(101);
++--------+----------+------------+----------+------------+-----------+
+| emp_id | emp_name | department | salary   | experience | city      |
++--------+----------+------------+----------+------------+-----------+
+|    101 | Rahul    | IT         | 65000.00 |          5 | Hyderabad |
++--------+----------+------------+----------+------------+-----------+
+1 row in set (0.00 sec)
+
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> -- EMPLOYEE BY DEPT
+mysql> DELIMITER //
+mysql> CREATE PROCEDURE getEmpByDept(IN DEPT VARCHAR())
+    -> BEGIN
+    -> SELECT * FROM EMPLOYEES
+    -> WHERE DEPARTMENT=DEPT;
+    -> END //
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '))
+BEGIN
+SELECT * FROM EMPLOYEES
+WHERE DEPARTMENT=DEPT;
+END' at line 1
+mysql> DESC EMPLOYEES;
+    -> ^C
+mysql> ^C
+mysql> DESC EMPLOYEES;
+    -> 
+    -> ^C
+mysql> DESC TABLE EMPLOYEES;
+    -> 
+    -> ^C
+mysql> -- EMPLOYEE BY DEPT
+mysql> DELIMITER //
+mysql> CREATE PROCEDURE getEmpByDept(IN DEPT VARCHAR(30))
+    -> BEGIN
+    -> SELECT * FROM EMPLOYEES
+    -> WHERE DEPARTMENT=DEPT;
+    -> END //
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> DELIMITER ;
+mysql> CALL  getEmpByDept('IT');
++--------+----------+------------+----------+------------+-----------+
+| emp_id | emp_name | department | salary   | experience | city      |
++--------+----------+------------+----------+------------+-----------+
+|    101 | Rahul    | IT         | 65000.00 |          5 | Hyderabad |
+|    104 | Sneha    | IT         | 80000.00 |          8 | Hyderabad |
+|    107 | Anjali   | IT         | 90000.00 |         10 | Delhi     |
+|    110 | Vikram   | IT         | 75000.00 |          7 | Bangalore |
++--------+----------+------------+----------+------------+-----------+
+4 rows in set (0.02 sec)
+
+Query OK, 0 rows affected (0.03 sec)
+
+mysql> DESC EMPLOYEES;
++------------+---------------+------+-----+---------+-------+
+| Field      | Type          | Null | Key | Default | Extra |
++------------+---------------+------+-----+---------+-------+
+| emp_id     | int           | NO   | PRI | NULL    |       |
+| emp_name   | varchar(50)   | YES  |     | NULL    |       |
+| department | varchar(30)   | YES  |     | NULL    |       |
+| salary     | decimal(10,2) | YES  |     | NULL    |       |
+| experience | int           | YES  |     | NULL    |       |
+| city       | varchar(30)   | YES  |     | NULL    |       |
++------------+---------------+------+-----+---------+-------+
+6 rows in set (0.08 sec)
+
+mysql> DELIMITER //
+mysql> CREATE PROCEDURE salaryRange(IN minSal DECIMAL(10,2), IN maxSal DECIMAL(10,2))
+    -> BEGIN
+    -> SELECT * FROM EMPLOYEES
+    -> WHERE SALARY BETWEEN minSal AND maxSal;
+    -> END //
+Query OK, 0 rows affected (0.03 sec)
+
+mysql> DELIMITER ;
+mysql> CALL salaryRange(40000,70000);
++--------+----------+------------+----------+------------+-----------+
+| emp_id | emp_name | department | salary   | experience | city      |
++--------+----------+------------+----------+------------+-----------+
+|    101 | Rahul    | IT         | 65000.00 |          5 | Hyderabad |
+|    102 | Priya    | HR         | 45000.00 |          3 | Chennai   |
+|    103 | Amit     | Finance    | 70000.00 |          6 | Bangalore |
+|    105 | Kiran    | Sales      | 40000.00 |          2 | Pune      |
+|    106 | Ravi     | HR         | 50000.00 |          4 | Mumbai    |
+|    108 | Suresh   | Finance    | 55000.00 |          5 | Chennai   |
+|    109 | Divya    | Sales      | 48000.00 |          3 | Hyderabad |
++--------+----------+------------+----------+------------+-----------+
+7 rows in set (0.01 sec)
+
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> DELIMITER //
+mysql> CREATE PROCEDURE EMP_WITH_EXP(IN DEPT VARCHAR(30), IN EXP INT))
+    -> BEGIN
+    -> SELECT * FROM EMPLOYEES
+    -> WHERE DEPARTMENT=DEPT AND EXPERIENCE>=EXP;
+    -> END //
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ')
+BEGIN
+SELECT * FROM EMPLOYEES
+WHERE DEPARTMENT=DEPT AND EXPERIENCE>=EXP;
+END' at line 1
+mysql> DELIMITER //
+mysql> CREATE PROCEDURE EMP_WITH_EXP(IN DEPT VARCHAR(30), IN EXP INT)
+    -> BEGIN
+    -> SELECT * FROM EMPLOYEES
+    -> WHERE DEPARTMENT=DEPT AND EXPERIENCE>=EXP;
+    -> END //
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> DELIMITER ;
+mysql> CALL EMP_WITH_EXP('IT',5);
++--------+----------+------------+----------+------------+-----------+
+| emp_id | emp_name | department | salary   | experience | city      |
++--------+----------+------------+----------+------------+-----------+
+|    101 | Rahul    | IT         | 65000.00 |          5 | Hyderabad |
+|    104 | Sneha    | IT         | 80000.00 |          8 | Hyderabad |
+|    107 | Anjali   | IT         | 90000.00 |         10 | Delhi     |
+|    110 | Vikram   | IT         | 75000.00 |          7 | Bangalore |
++--------+----------+------------+----------+------------+-----------+
+4 rows in set (0.01 sec)
+
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> DELIMITER //
+mysql> CREATE PROCEDURE TOTAL_EMP(OUT total INT)
+    -> BEGIN
+    -> SELECT COUNT(*) INTO TOTAL
+    -> FROM EMPLOYEES
+    -> END //
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 5
+mysql> DELIMITER //
+mysql> CREATE PROCEDURE TOTAL_EMP(OUT total INT)
+    -> BEGIN
+    -> SELECT COUNT(*) INTO TOTAL
+    -> FROM EMPLOYEES;
+    -> END //
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> DELIMITER ;
+mysql> CALL  TOTAL_EMP(@total);
+Query OK, 1 row affected (0.04 sec)
+
+mysql> select@total;
++--------+
+| @total |
++--------+
+|     10 |
++--------+
+1 row in set (0.00 sec)
+
+mysql> DELIMITER //
+mysql> CREATE PROCEDURE TOTAL_EMP(OUT total INT)
+    -> BEGIN
+    -> SELECT COUNT(*) INTO TOTAL
+    -> where department='it'
+    -> from employees;
+    -> end;
+    -> ^C
+mysql> DELIMITER //
+mysql> CREATE PROCEDURE TOTAL_EMP(OUT total INT)
+    -> BEGIN
+    -> SELECT COUNT(*) INTO TOTAL
+    -> where department='it'
+    -> from employees;
+    -> END //
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'from employees;
+END' at line 5
+mysql> DELIMITER //
+mysql> CREATE PROCEDURE TOTAL_EMP(OUT total INT)
+    -> 
+    -> BEGIN
+    -> SELECT COUNT(*) INTO TOTAL
+    -> WHERE DEPARTMENT='IT'
+    -> FROM EMPLOYEES;
+    -> END //
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'FROM EMPLOYEES;
+END' at line 6
+mysql> DELIMITER //
+mysql> CREATE PROCEDURE TOTALEMP(OUT TOTAL INT)
+    -> BEGIN
+    -> SELECT COUNT(*) INTO TOTAL_IT_COUNT
+    -> FROM EMPLOYEES
+    -> WHERE DEPARTMENT='IT' ;
+    -> END //
+ERROR 1327 (42000): Undeclared variable: TOTAL_IT_COUNT
+mysql> DELIMITER //
+mysql> CREATE PROCEDURE TOTALEMP(OUT TOTAL INT)
+    -> BEGIN
+    -> SELECT COUNT(*) INTO TOTAL
+    -> WHERE DEPARTMENT='IT' ;
+    -> END //
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> DELIMITER ;
+mysql> CALL TOTALEMP(@TOTAL);
+ERROR 1054 (42S22): Unknown column 'DEPARTMENT' in 'where clause'
+mysql> DELIMITER ;
+mysql> CALL TOTALEMP(@TOTAL);
+ERROR 1054 (42S22): Unknown column 'DEPARTMENT' in 'where clause'
+mysql> -- IN AND OUT PARAMETERS
+mysql> DELIMITER //
+mysql> CREATE PROCEDURE AddBonus(IN empid INT, OUT bonus DECIMAL(10,2))
+    -> BEGIN
+    -> UPDATE EMPLOYEES
+    -> SET SALARY=SALARY+BONUS
+    -> WHERE EMP_ID=EMPID;
+    -> 
+    -> SELECT SALARY
+    -> INTO BONUS
+    -> FROM EMPLOYEES
+    -> WHERE EMP_ID=EMPID;
+    -> END //
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> DELIMITER ;
+mysql> SET @B=5000;
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> CALL AddBonus(101,@B);
+Query OK, 1 row affected (0.05 sec)
+
+mysql> SELECT @B;
++------+
+| @B   |
++------+
+| NULL |
++------+
+1 row in set (0.00 sec)
+
+mysql> SELECT * FROM EMPLOYEES;
++--------+----------+------------+----------+------------+-----------+
+| emp_id | emp_name | department | salary   | experience | city      |
++--------+----------+------------+----------+------------+-----------+
+|    101 | Rahul    | IT         |     NULL |          5 | Hyderabad |
+|    102 | Priya    | HR         | 45000.00 |          3 | Chennai   |
+|    103 | Amit     | Finance    | 70000.00 |          6 | Bangalore |
+|    104 | Sneha    | IT         | 80000.00 |          8 | Hyderabad |
+|    105 | Kiran    | Sales      | 40000.00 |          2 | Pune      |
+|    106 | Ravi     | HR         | 50000.00 |          4 | Mumbai    |
+|    107 | Anjali   | IT         | 90000.00 |         10 | Delhi     |
+|    108 | Suresh   | Finance    | 55000.00 |          5 | Chennai   |
+|    109 | Divya    | Sales      | 48000.00 |          3 | Hyderabad |
+|    110 | Vikram   | IT         | 75000.00 |          7 | Bangalore |
++--------+----------+------------+----------+------------+-----------+
+10 rows in set (0.00 sec)
+
+mysql> CALL AddBonus(102,@B);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> SELECT @B;
++------+
+| @B   |
++------+
+| NULL |
++------+
+1 row in set (0.00 sec)
+
+mysql> DELIMITER ;
+mysql> SET @B=10000;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> CALL AddBonus(102,@b);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> select @b;
++------+
+| @b   |
++------+
+| NULL |
++------+
+1 row in set (0.00 sec)
+
+mysql> DELIMITER ;
+mysql> SET @m=10000;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> CALL AddBonus(102,@m);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> select @m;
++------+
+| @m   |
++------+
+| NULL |
++------+
+1 row in set (0.00 sec)
+
+mysql> update table employees set salary=50000 where emp_id=101;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'table employees set salary=50000 where emp_id=101' at line 1
+mysql> update employees set salary=50000 where emp_id=101;
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> select * from employees;
++--------+----------+------------+----------+------------+-----------+
+| emp_id | emp_name | department | salary   | experience | city      |
++--------+----------+------------+----------+------------+-----------+
+|    101 | Rahul    | IT         | 50000.00 |          5 | Hyderabad |
+|    102 | Priya    | HR         |     NULL |          3 | Chennai   |
+|    103 | Amit     | Finance    | 70000.00 |          6 | Bangalore |
+|    104 | Sneha    | IT         | 80000.00 |          8 | Hyderabad |
+|    105 | Kiran    | Sales      | 40000.00 |          2 | Pune      |
+|    106 | Ravi     | HR         | 50000.00 |          4 | Mumbai    |
+|    107 | Anjali   | IT         | 90000.00 |         10 | Delhi     |
+|    108 | Suresh   | Finance    | 55000.00 |          5 | Chennai   |
+|    109 | Divya    | Sales      | 48000.00 |          3 | Hyderabad |
+|    110 | Vikram   | IT         | 75000.00 |          7 | Bangalore |
++--------+----------+------------+----------+------------+-----------+
+10 rows in set (0.00 sec)
+
+mysql> update employees set salary=50000 where salary='NULL';
+ERROR 1292 (22007): Truncated incorrect DECIMAL value: 'NULL'
+mysql> update employees set salary=50000 where salary=NULL;
+Query OK, 0 rows affected (0.00 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> SELECT * FROM EMPLOYEES;
++--------+----------+------------+----------+------------+-----------+
+| emp_id | emp_name | department | salary   | experience | city      |
++--------+----------+------------+----------+------------+-----------+
+|    101 | Rahul    | IT         | 50000.00 |          5 | Hyderabad |
+|    102 | Priya    | HR         |     NULL |          3 | Chennai   |
+|    103 | Amit     | Finance    | 70000.00 |          6 | Bangalore |
+|    104 | Sneha    | IT         | 80000.00 |          8 | Hyderabad |
+|    105 | Kiran    | Sales      | 40000.00 |          2 | Pune      |
+|    106 | Ravi     | HR         | 50000.00 |          4 | Mumbai    |
+|    107 | Anjali   | IT         | 90000.00 |         10 | Delhi     |
+|    108 | Suresh   | Finance    | 55000.00 |          5 | Chennai   |
+|    109 | Divya    | Sales      | 48000.00 |          3 | Hyderabad |
+|    110 | Vikram   | IT         | 75000.00 |          7 | Bangalore |
++--------+----------+------------+----------+------------+-----------+
+10 rows in set (0.00 sec)
+
+mysql> update employees set salary=50000 where emp_id=102;
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> SELECT * FROM EMPLOYEES;
++--------+----------+------------+----------+------------+-----------+
+| emp_id | emp_name | department | salary   | experience | city      |
++--------+----------+------------+----------+------------+-----------+
+|    101 | Rahul    | IT         | 50000.00 |          5 | Hyderabad |
+|    102 | Priya    | HR         | 50000.00 |          3 | Chennai   |
+|    103 | Amit     | Finance    | 70000.00 |          6 | Bangalore |
+|    104 | Sneha    | IT         | 80000.00 |          8 | Hyderabad |
+|    105 | Kiran    | Sales      | 40000.00 |          2 | Pune      |
+|    106 | Ravi     | HR         | 50000.00 |          4 | Mumbai    |
+|    107 | Anjali   | IT         | 90000.00 |         10 | Delhi     |
+|    108 | Suresh   | Finance    | 55000.00 |          5 | Chennai   |
+|    109 | Divya    | Sales      | 48000.00 |          3 | Hyderabad |
+|    110 | Vikram   | IT         | 75000.00 |          7 | Bangalore |
++--------+----------+------------+----------+------------+-----------+
+10 rows in set (0.00 sec)
+
+mysql> DELIMITER //
+mysql> CREATE PROCEDURE AddBonus(IN empid INT, OUT bonus DECIMAL(10,2))
+    -> BEGIN
+    -> UPDATE EMPLOYEES
+    -> SET SALARY=SALARY+BONUS
+    -> WHERE EMP_ID=EMPID;
+    -> SELECT SALARY
+    -> INTO BONUS
+    -> FROM EMPLOYEES
+    -> WHERE EMP_ID=EMPID;
+    -> END //
+ERROR 1304 (42000): PROCEDURE AddBonus already exists
+mysql> SHOW TABLES;
+    -> ^C
+mysql> SHOW TABLES;
+    -> ^C
+mysql> SHOW DATABASES;
+    -> 
+    -> 
+    -> 
+    -> 
+    -> 
+    -> 
+    -> 
+    -> ^C
+mysql> SHOW TABLES;
+    -> Terminal close -- exit!
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| college            |
+| company            |
+| db4                |
+| details            |
+| information_schema |
+| mysql              |
+| performance_schema |
+| practice           |
+| psf4               |
+| school1            |
+| student            |
+| students           |
+| sys                |
+| walmartsales       |
+| xyz                |
++--------------------+
+15 rows in set (0.03 sec)
+
+mysql> use db4;
+Database changed
+mysql> show tabales;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'tabales' at line 1
+mysql> show tables;
++-----------------+
+| Tables_in_db4   |
++-----------------+
+| backupemp       |
+| city            |
+| company_staff   |
+| country         |
+| countrylanguage |
+| department      |
+| emp             |
+| emp2            |
+| emp_3           |
+| employee        |
+| employees       |
+| orders          |
+| placed_students |
+| product_        |
+| products        |
+| project         |
+| projects        |
+| sales           |
+| students        |
+| studentscores   |
++-----------------+
+20 rows in set (0.02 sec)
+
+mysql> use psf4;
+Database changed
+mysql> show tables;
++----------------+
+| Tables_in_psf4 |
++----------------+
+| departments    |
+| employees      |
+| projects       |
++----------------+
+3 rows in set (0.00 sec)
+
+mysql> use xyz;
+Database changed
+mysql> show tables;
++------------------------+
+| Tables_in_xyz          |
++------------------------+
+| departments            |
+| employee               |
+| employees              |
+| vw_dept_salary_summary |
+| vw_emp_annual_salary   |
+| vw_highpaying_dept     |
++------------------------+
+6 rows in set (0.01 sec)
+
+mysql> create database sample;
+Query OK, 1 row affected (0.03 sec)
+
+mysql> use sample;
+Database changed
+mysql> CREATE TABLE Employees (
+    ->     emp_id INT PRIMARY KEY,
+    ->     emp_name VARCHAR(50),
+    ->     department VARCHAR(30),
+    ->     salary DECIMAL(10,2),
+    ->     experience INT,
+    ->     city VARCHAR(30)
+    -> );
+Query OK, 0 rows affected (0.24 sec)
+
+mysql> 
+mysql> 
+mysql> 
+mysql> INSERT INTO Employees VALUES
+    -> (101,'Rahul','IT',65000,5,'Hyderabad'),
+    -> (102,'Priya','HR',45000,3,'Chennai'),
+    -> (103,'Amit','Finance',70000,6,'Bangalore'),
+    -> (104,'Sneha','IT',80000,8,'Hyderabad'),
+    -> (105,'Kiran','Sales',40000,2,'Pune');
+Query OK, 5 rows affected (0.02 sec)
+Records: 5  Duplicates: 0  Warnings: 0
+
+mysql> 
+mysql> 
+mysql> 
+mysql> 
+mysql> CREATE TABLE Employee_Audit(
+    ->     audit_id INT AUTO_INCREMENT PRIMARY KEY,
+    ->     emp_id INT,
+    ->     action_type VARCHAR(20),
+    ->     old_salary DECIMAL(10,2),
+    ->     new_salary DECIMAL(10,2),
+    ->     action_time DATETIME
+    -> );
+Query OK, 0 rows affected (0.04 sec)
+
+mysql> select * from employees;
++--------+----------+------------+----------+------------+-----------+
+| emp_id | emp_name | department | salary   | experience | city      |
++--------+----------+------------+----------+------------+-----------+
+|    101 | Rahul    | IT         | 65000.00 |          5 | Hyderabad |
+|    102 | Priya    | HR         | 45000.00 |          3 | Chennai   |
+|    103 | Amit     | Finance    | 70000.00 |          6 | Bangalore |
+|    104 | Sneha    | IT         | 80000.00 |          8 | Hyderabad |
+|    105 | Kiran    | Sales      | 40000.00 |          2 | Pune      |
++--------+----------+------------+----------+------------+-----------+
+5 rows in set (0.00 sec)
+
