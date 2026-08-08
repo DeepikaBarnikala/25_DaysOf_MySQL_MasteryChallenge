@@ -1,6 +1,5 @@
 Day_20_MySQL
 =============
-
 mysql> show databases;
 +------------------------+
 | Database               |
